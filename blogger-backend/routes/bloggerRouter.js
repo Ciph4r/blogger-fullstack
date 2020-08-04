@@ -2,9 +2,22 @@ const express = require('express');
 const router = express.Router();
 const Blog = require('./model/Blog')
 /* GET home page. */
-router.get('/', function(req, res, next) {
-  res.render('index', { title: 'Express' });
-});
+
+
+
+
+router.get('/' , (req,res,next) => {
+  Blog.find().then((foundBlog) => {
+    if(foundBlog.length === 0 ){
+      return res.status(200).json({Comfirmation: 'Success',Message: 'Blogs Are Empty'})
+    }else{
+      return res.status(200).json({Comfirmation: 'Success', foundBlog})
+    }
+  })
+  .catch((err) => {
+    return res.status(404).json({Comfirmation: 'Failed' ,  err})
+  })
+})
 
 
 router.get('/id/:id' , (req,res,next) => {
